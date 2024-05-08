@@ -4,7 +4,7 @@ if (!empty($_POST["btnmodificar"])) {
         $nombre=$_POST["txtnombre"];
         $id=$_POST["txtid"];
         $verificarNombre=$conexion->query(" select count(*) as 'total' from cargo where nombre='$nombre' and id_cargo!=$id ");
-        if ($verificarNombre->fetch_object()->total > 0) { ?>
+        if ($verificarNombre->fetch_assoc()->total > 0) { ?>
         <script>
             $(function notificacion() {
                 new PNotify({

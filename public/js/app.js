@@ -474,7 +474,7 @@ Axios.prototype.request = function request(config) {
   var responseInterceptorChain = [];
   this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
     responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
-  });
+  }); 
 
   var promise;
 

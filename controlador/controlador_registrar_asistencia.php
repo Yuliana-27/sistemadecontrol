@@ -1,75 +1,74 @@
 <?php
 if (!empty($_POST["btnentrada"])) {
     if (!empty($_POST["txtdni"])) {
-    $dni = $_POST["txtdni"];
-    $consulta = $conexion->query(" select count(*) as 'total' from empleado where dni='$dni' ");
-    $id = $conexion->query(" select id_empleado from empleado where dni='$dni' ");
-    if ($consulta->fetch_object()->total > 0) {
-        $fecha = date("Y-m-d H:i:s");
-        $id_empleado = $id->fetch_object()->id_empleado;
+        $dni = $_POST["txtdni"];
+        $consulta = $conexion->query("SELECT count(*) as 'total', id_empleado FROM empleado WHERE dni='$dni'");
+        $empleado = $consulta->fetch_assoc();
 
+        if ($empleado['total'] > 0) {
+            date_default_timezone_set('America/Mexico_City');
+            $fecha = date("Y-m-d");
 
-        $consultaFecha=$conexion->query(" select entrada from asistencia where id_empleado=$id_empleado order by id_asistencia desc limit 1");
-        $fechaBD=$consultaFecha->fetch_object()->entrada;
+            // Verificar si ya registró entrada hoy
+            $consultaFecha = $conexion->query("SELECT entrada FROM asistencia WHERE id_empleado={$empleado['id_empleado']} AND DATE(entrada) = '$fecha'");
+            $entradaHoy = $consultaFecha->fetch_assoc();
 
-        if (substr($fecha, 0, 10)==substr($fechaBD, 0, 10)) { ?>
-            <script>
-            $(function notificacion() {
-                new PNotify({
-                    title: "ERROR!",
-                    type: "error",
-                    text: "Ya Registraste Tu Entrada",
-                    styling: "bootstrap3"
-                })
-            })
-        </script>
-        <?php } else {
-            $sql = $conexion->query(" insert into asistencia(id_empleado,entrada)values($id_empleado, '$fecha') ");
-            if ($sql == true) { ?>
-            <script>
-                $(function notificacion() {
-                    new PNotify({
-                        title: "CORRECTO!",
-                        type: "success",
-                        text: "Hola, Bienvenido al ITTUX",
-                        styling: "bootstrap3"
-                    })
-                })
-            </script>
-            <?php } else { ?>
+            if ($entradaHoy) { ?>
                 <script>
+                    $(function notificacion() {
+                        new PNotify({
+                            title: "ERROR!",
+                            type: "error",
+                            text: "Ya has registrado tu entrada hoy",
+                            styling: "bootstrap3"
+                        })
+                    })
+                </script>
+            <?php } else {
+                $sql = $conexion->query("INSERT INTO asistencia(id_empleado, entrada) VALUES ({$empleado['id_empleado']}, NOW())");
+                if ($sql) { ?>
+                    <script>
+                        $(function notificacion() {
+                            new PNotify({
+                                title: "CORRECTO!",
+                                type: "success",
+                                text: "¡Hola, bienvenido al ITTUX!",
+                                styling: "bootstrap3"
+                            })
+                        })
+                    </script>
+                <?php } else { ?>
+                    <script>
+                        $(function notificacion() {
+                            new PNotify({
+                                title: "ERROR!",
+                                type: "error",
+                                text: "Error al registrar entrada",
+                                styling: "bootstrap3"
+                            })
+                        })
+                    </script>
+                <?php }
+            }
+        } else { ?>
+            <script>
                 $(function notificacion() {
                     new PNotify({
                         title: "ERROR!",
                         type: "error",
-                        text: "Error Al Registrar Entrada",
+                        text: "El número de control no existe",
                         styling: "bootstrap3"
                     })
                 })
             </script>
-            <?php }
-        }
-        
+        <?php }
     } else { ?>
         <script>
             $(function notificacion() {
                 new PNotify({
                     title: "ERROR!",
                     type: "error",
-                    text: "El Numero de Control No Existe",
-                    styling: "bootstrap3"
-                })
-            })
-        </script>
-    <?php }
-
-    } else { ?>
-        <script>
-            $(function notificacion() {
-                new PNotify({
-                    title: "ERROR!",
-                    type: "error",
-                    text: "Ingrese Su Número de Control",
+                    text: "Ingrese su número de control",
                     styling: "bootstrap3"
                 })
             })
@@ -78,13 +77,10 @@ if (!empty($_POST["btnentrada"])) {
 
     <script>
         setTimeout(() => {
-            window.history.replaceState(null,null,window.location.pathname);
+            window.history.replaceState(null, null, window.location.pathname);
         }, 0);
     </script>
-
-    
-<?php }
-?>
+<?php } ?>
 
 
 
@@ -94,120 +90,136 @@ if (!empty($_POST["btnentrada"])) {
 <?php
 if (!empty($_POST["btnsalida"])) {
     if (!empty($_POST["txtdni"])) {
-    $dni = $_POST["txtdni"];
-    $consulta = $conexion->query(" select count(*) as 'total' from empleado where dni='$dni' ");
-    $id = $conexion->query(" select id_empleado from empleado where dni='$dni' ");
-    if ($consulta->fetch_object()->total > 0) {
+        $dni = $_POST["txtdni"];
+        $consulta = $conexion->query("SELECT count(*) as 'total', id_empleado FROM empleado WHERE dni='$dni'");
+        $resultadoConsulta = $consulta->fetch_assoc();
 
+        if ($resultadoConsulta['total'] > 0) {
+            $id_empleado = $resultadoConsulta['id_empleado'];
+            echo date_default_timezone_set('America/Mexico_City');
+            $fecha = date("Y-m-d H:i:s");
 
+            // Buscar la última entrada del empleado
+            $busqueda = $conexion->query("SELECT id_asistencia, entrada FROM asistencia WHERE id_empleado=$id_empleado ORDER BY id_asistencia DESC LIMIT 1");
 
-        $fecha = date("Y-m-d H:i:s");
-        $id_empleado = $id->fetch_object()->id_empleado;
-        $busqueda = $conexion->query(" select id_asistencia from asistencia where id_empleado=$id_empleado order bay id_asistencia desc limit 1");
+            if ($busqueda->num_rows > 0) {
+                $datos = $busqueda->fetch_object();
+                $id_asistencia = $datos->id_asistencia;
+                $entradaBD = $datos->entrada;
 
-        //para que no haya duplicidad de salidas//
+                // Verificar si ya registró salida hoy
+                if (substr($entradaBD, 0, 10) != date("Y-m-d")) {
+                    ?>
+                    <script>
+                        $(function notificacion() {
+                            new PNotify({
+                                title: "ERROR!",
+                                type: "error",
+                                text: "Primero debes registrar tu entrada",
+                                styling: "bootstrap3"
+                            })
+                        })
+                    </script>
+                    <?php
+                } else {
+                    // Verificar si ya se registró la salida hoy
+                    $consultaSalida = $conexion->query("SELECT COUNT(*) as 'salida_registrada' FROM asistencia WHERE id_empleado=$id_empleado AND DATE(salida) = CURDATE()");
+                    $resultadoSalida = $consultaSalida->fetch_assoc();
 
-        while ($datos=$busqueda->fetch_object()) {
-            $id_asistencia = $datos->id_asistencia;
-            $entradaBD=$datos->entrada;
-        } 
+                    if ($resultadoSalida['salida_registrada'] > 0) {
+                        ?>
+                        <script>
+                            $(function notificacion() {
+                                new PNotify({
+                                    title: "ERROR!",
+                                    type: "error",
+                                    text: "Ya has registrado tu salida hoy",
+                                    styling: "bootstrap3"
+                                })
+                            })
+                        </script>
+                        <?php
+                    } else {
+                        // Actualizar la salida del empleado
+                        $sql = $conexion->query("UPDATE asistencia SET salida='$fecha' WHERE id_asistencia=$id_asistencia");
 
-        if (substr($fecha,0,10)!=substr($entradaBD,0,10)) { 
+                        if ($sql) {
+                            ?>
+                            <script>
+                                $(function notificacion() {
+                                    new PNotify({
+                                        title: "CORRECTO!",
+                                        type: "success",
+                                        text: "¡Adiós, vuelve pronto al ITTUX!",
+                                        styling: "bootstrap3"
+                                    })
+                                })
+                            </script>
+                            <?php
+                        } else {
+                            ?>
+                            <script>
+                                $(function notificacion() {
+                                    new PNotify({
+                                        title: "ERROR!",
+                                        type: "error",
+                                        text: "Error al registrar la salida",
+                                        styling: "bootstrap3"
+                                    })
+                                })
+                            </script>
+                            <?php
+                        }
+                    }
+                }
+            } else {
+                ?>
+                <script>
+                    $(function notificacion() {
+                        new PNotify({
+                            title: "ERROR!",
+                            type: "error",
+                            text: "Primero debes registrar tu entrada",
+                            styling: "bootstrap3"
+                        })
+                    })
+                </script>
+                <?php
+            }
+        } else {
+            ?>
+            <script>
+                $(function notificacion() {
+                    new PNotify({
+                        title: "ERROR!",
+                        type: "error",
+                        text: "El número de control no existe",
+                        styling: "bootstrap3"
+                    })
+                })
+            </script>
+            <?php
+        }
+    } else {
         ?>
         <script>
             $(function notificacion() {
                 new PNotify({
                     title: "ERROR!",
                     type: "error",
-                    text: "Primero Debes Registrar Tu Entrada",
+                    text: "Ingrese su número de control",
                     styling: "bootstrap3"
                 })
             })
         </script>
         <?php
-        } else {
-            $consultaFecha=$conexion->query(" select salida from asistencia where id_empleado=$id_empleado order by id_asistencia desc limit 1");
-        $fechaBD=$consultaFecha->fetch_object()->salida;
-
-        if (substr($fecha,0,10) == substr($fechaBD,0,10)) { 
-            ?>
-        <script>
-            $(function notificacion() {
-                new PNotify({
-                    title: "ERROR!",
-                    type: "error",
-                    text: "Ya Registraste Tu Sálida",
-                    styling: "bootstrap3"
-                })
-            })
-        </script>
-        <?php } else {
-            $sql = $conexion->query(" update asistencia set salida='$fecha' where id_asistencia=$id_asistencia ");
-            if ($sql == true) { ?>
-            <script>
-                $(function notificacion() {
-                    new PNotify({
-                        title: "CORRECTO!",
-                        type: "success",
-                        text: "Adios, Vuelve Pronto al ITTUX",
-                        styling: "bootstrap3"
-                    })
-                })
-            </script>
-            
-            <?php } else { ?>
-                <script>
-                $(function notificacion() {
-                    new PNotify({
-                        title: "ERROR!",
-                        type: "error",
-                        text: "Error Al Registrar Sálida",
-                        styling: "bootstrap3"
-                    })
-                })
-            </script>
-            <?php }
-        }
-        
-        }
-        
-
-        
-
-        //   
-        
-    } else { ?>
-        <script>
-            $(function notificacion() {
-                new PNotify({
-                    title: "ERROR!",
-                    type: "error",
-                    text: "El Numero de Control No Existe",
-                    styling: "bootstrap3"
-                })
-            })
-        </script>
-    <?php }
-
-    } else { ?>
-        <script>
-            $(function notificacion() {
-                new PNotify({
-                    title: "ERROR!",
-                    type: "error",
-                    text: "Ingrese Su Número de Control",
-                    styling: "bootstrap3"
-                })
-            })
-        </script>
-    <?php } ?>
-
-    <script>
-        setTimeout(() => {
-            window.history.replaceState(null,null,window.location.pathname);
-        }, 0);
-    </script>
-
-    
-<?php }
+    }
+}
 ?>
+
+<script>
+    setTimeout(() => {
+        window.history.replaceState(null, null, window.location.pathname);
+    }, 0);
+</script>
+

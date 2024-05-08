@@ -40,7 +40,7 @@ if (empty($_SESSION['nombre']) and empty($_SESSION['apellido'])) {
                 <th scope="col">NOMBRE</th>
                 <th></th>
             </tr>
-        </thead>
+        </thead> 
         <tbody> 
             <?php
             while ($datos = $sql->fetch_object()) { ?>
