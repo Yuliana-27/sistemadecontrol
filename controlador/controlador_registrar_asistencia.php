@@ -110,7 +110,7 @@ if (!empty($_POST["btnsalida"])) {
         while ($datos=$busqueda->fetch_object()) {
             $id_asistencia = $datos->id_asistencia;
             $entradaBD=$datos->entrada;
-        }
+        } 
 
         if (substr($fecha,0,10)!=substr($entradaBD,0,10)) { 
         ?>
