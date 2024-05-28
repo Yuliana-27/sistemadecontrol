@@ -66,7 +66,7 @@ if (empty($_SESSION['nombre']) and empty($_SESSION['apellido'])) {
                             <div class="modal-body">
                                 <form action="" method="POST">
                                     <div hidden class="fl-flex-label mb-4 px-2 col-12 ">
-                                        <input type="text" placeholder="ID" class="input input__text" name="txtid" value="<?= $datos->id_usuario ?>">
+                                        <input type="text" placeholder="ID" class="input input__text" name="txtid" value="<?= $datos->id_cargo ?>">
                                     </div>
                                     <div class="fl-flex-label mb-4 px-2 col-12 ">
                                         <input type="text" placeholder="Nombre" class="input input__text" name="txtnombre" value="<?= $datos->nombre ?>">

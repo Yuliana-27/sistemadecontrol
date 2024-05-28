@@ -50,6 +50,42 @@ $datos = $sql->fetch_object(); // Obtener solo un conjunto de datos, asumiendo q
                 <!--<a href="usuario.php" class="btn btn-secondary btn-rounded">Atras</a> -->
                 <button type="submit" value="ok" name="btnmodificar" class="btn btn-primary btn-rounded">Modificar</button>
             </div>
+
+            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                <p>
+                    <strong>Autor:</strong>
+                    Yuliana del Carmen Altamirano Montes <br>
+                    <strong>Carrera:</strong> Ingenieria en Sistemas Computacionales  <br>
+                    <strong>Edad:</strong> 21 años<br>
+                    <strong>Descripción:</strong> Desarrollo de un Sistema de Acceso de Entrada y Sálida de los Alumnos del
+                    Instituto Tecnologico de Tuxtepec. <br>
+                    <strong>Conocimiento:</strong> <br>
+                    HTML <br>
+                    PHP <br>
+                    CSS <br>
+                    <strong>Contacto:</strong> 2871655409 <br>
+                    <strong>Correo:</strong> isc20350250@gmail.com  <br>
+                    
+                </p>
+            </div>
+
+            <div class="fl-flex-label mb-4 px-2 col-12 col-md-6">
+                <p>
+                    <strong>Autor:</strong>
+                    Jennifer Vendrell Javier <br>
+                    <strong>Carrera:</strong> Ingenieria en Sistemas Computacionales  <br>
+                    <strong>Edad:</strong> 21 años<br>
+                    <strong>Descripción:</strong> Desarrollo de un Sistema de Acceso de Entrada y Sálida de los Alumnos del
+                    Instituto Tecnologico de Tuxtepec. <br>
+                    <strong>Conocimiento:</strong> <br>
+                    HTML <br>
+                    PHP <br>
+                    CSS <br>
+                    <strong>Contacto:</strong>  <br>
+                    <strong>Correo:</strong>
+                    
+                </p>
+            </div>
         </form>
     </div>
 </div>

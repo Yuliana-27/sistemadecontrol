@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina de Bienvenida</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="public/estilos/estilos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
 <body>
     <h1>BIENVENIDOS Al INSTITUTO TÉCNOLOGICO DE TUXTEPEC</h1>
     <h2 id="fecha"></h2>
-    <?php
+    <?php 
     include "modelo/conexion.php";
     include "controlador/controlador_registrar_asistencia.php";
     ?>
@@ -37,10 +37,9 @@
         <form action="" method="POST">
             <input type="number" placeholder="20350250" name="txtdni" id="txtdni">
             <div class="botones">
-            
-                <button id="entrada" class="entrada" type="submit" name="btnentrada" value="ok">Entrada</button>
-                <button id="salida" class="salida" type="submit" name="btnsalida" value="ok">Sálida</button>
-            </div>
+            <button id="entrada" class="entrada" type="submit" name="btnentrada" value="ok">Entrada</button>
+                <button id="salida" class="salida" type="submit" name="btnsalida" value="ok">Sálida</button>  
+            </div> 
         </form>
     </div>
 
@@ -60,9 +59,7 @@
             }
         })
 
-
         //Eventos para la entrada y salida con teclas//
-
 
         document.addEventListener("keyup", function(event){
             if (event.code == "ArrowLeft") {
@@ -71,9 +68,12 @@
                 if (event.code == "ArrowRight") {
                     document.getElementById("salida").click()
                 }
-            }
+            } 
         })
 
     </script>
+
+    
 </body>
+
 </html>

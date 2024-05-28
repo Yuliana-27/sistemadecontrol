@@ -56,7 +56,7 @@ class PDF extends FPDF
       $this->SetDrawColor(163, 163, 163); //colorBorde
       $this->SetFont('Arial', 'B', 11);
       $this->Cell(15, 10, utf8_decode('N°'), 1, 0, 'C', 1);
-      $this->Cell(130, 10, utf8_decode('EMPLEADO'), 1, 0, 'C', 1);
+      $this->Cell(130, 10, utf8_decode('ALUMNO'), 1, 0, 'C', 1);
       $this->Cell(30, 10, utf8_decode('N.CONTROL'), 1, 0, 'C', 1);
       $this->Cell(100, 10, utf8_decode('CARGO'), 1, 1, 'C', 1);
    }

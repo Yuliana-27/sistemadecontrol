@@ -56,7 +56,7 @@ class PDF extends FPDF
       $this->SetDrawColor(163, 163, 163); //colorBorde
       $this->SetFont('Arial', 'B', 11);
       $this->Cell(15, 10, utf8_decode('N°'), 1, 0, 'C', 1);
-      $this->Cell(80, 10, utf8_decode('EMPLEADO'), 1, 0, 'C', 1);
+      $this->Cell(80, 10, utf8_decode('ALUMNO'), 1, 0, 'C', 1);
       $this->Cell(30, 10, utf8_decode('DNI'), 1, 0, 'C', 1);
       $this->Cell(50, 10, utf8_decode('CARGO'), 1, 0, 'C', 1);
       $this->Cell(50, 10, utf8_decode('ENTRADA'), 1, 0, 'C', 1);
@@ -103,5 +103,5 @@ while ($datos_reporte = $consulta_reporte_asistencia->fetch_object()) {
    $pdf->Cell(50, 10, utf8_decode($datos_reporte->salida), 1, 1, 'C', 0);
 }
 
-
+ 
 $pdf->Output('Reporte Asistencia.pdf', 'I');//nombreDescarga, Visor(I->visualizar - D->descargar)

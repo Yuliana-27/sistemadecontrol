@@ -1,11 +1,12 @@
 <?php
 if (!empty($_POST["btnmodificar"])) {
-    if (!empty($_POST["txtid"]) and !empty($_POST["txtnombre"]) and !empty($_POST["txtapellido"]) and !empty($_POST["txtcargo"])) {
+    if (!empty($_POST["txtid"]) and !empty($_POST["txtnombre"]) and !empty($_POST["txtapellido"]) and !empty($_POST["txtdni"]) and !empty($_POST["txtcargo"])) {
         $id=$_POST["txtid"];
         $nombre=$_POST["txtnombre"];
         $apellido=$_POST["txtapellido"];
+        $dni=$_POST["txtdni"];
         $cargo=$_POST["txtcargo"];
-        $sql=$conexion->query(" update empleado set nombre='$nombre', apellido='$apellido', cargo=$cargo where id_empleado=$id");
+        $sql=$conexion->query(" update empleado set nombre='$nombre', apellido='$apellido', dni='$dni', cargo=$cargo where id_empleado=$id");
         if ($sql==true) { ?>
             <script>
             $(function notificacion() {
