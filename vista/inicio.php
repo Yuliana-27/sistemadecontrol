@@ -43,9 +43,14 @@ INNER JOIN cargo ON empleado.cargo = cargo.id_cargo ");
 ?>
 <div class="text-right mb-2">
     <a href="fpdf/reporteAsistencia.php" target="_blank" class="btn btn-primary"><i class="far fa-file-pdf"></i> Generar Reporte </a> 
-    <a href="fpdf/reporteGraficaAsistencia.php" target="_blank" class="btn btn-success"><i class="far fa-chart-bar"></i> Generar Gráficas </a>
-    <a href="fpdf/asistencia.xml" target="_blank" class="btn btn-success"><i class="far fa-chart-bar"></i> XML </a>
-    <a href="fpdf/reportestatic.php" target="_blank" class="btn btn-danger"><i class="far fa-chart-bar"></i> Gráficas Estatica </a>
+</div>
+
+<div class="text-right mb-2">
+<a href="reporte_asistencia.php" class="btn btn-danger"><i class="fas fa-plus"></i> Reporte Por Fechas </a>
+</div>
+
+<div class="text-right mb-2">
+<a href="fpdf/reporteGraficaAsistencia.php" target="_blank" class="btn btn-success"><i class="far fa-chart-bar"></i> Generar Gráficas </a>
 </div>
 
     <table class="table table-bordered table-hover w-100" id="example">

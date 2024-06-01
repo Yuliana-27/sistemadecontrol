@@ -1,28 +1,33 @@
 <?php
    include '../../modelo/conexion.php'; // Archivo de conexión a la base de datos
+   include("FusionCharts.php"); // Incluir la clase FusionCharts
 ?>
 
 <html>
 <head>
-    <title>Gráfico de Entrada y Salida</title>
+    <title>Gráfico de Entrada por Cargo</title>
     <script src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
     <script src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 </head>
 <body>
     <?php
-        // Formar la consulta SQL para seleccionar las columnas entrada y salida de la tabla asistencia
-        $strQuery = "SELECT entrada, salida FROM asistencia";
+        // Formar la consulta SQL para seleccionar el conteo de entradas agrupadas por cargo
+        $strQuery = "SELECT cargo.nombre AS cargo, COUNT(asistencia.id_empleado) AS cantidad_entradas 
+                FROM asistencia 
+                JOIN empleado ON asistencia.id_empleado = empleado.id_empleado 
+                JOIN cargo ON empleado.cargo = cargo.id_cargo 
+                GROUP BY cargo.nombre";
 
         // Ejecutar la consulta
-        $result = $dbhandle->query($strQuery) or exit("Error al ejecutar la consulta: ".$dbhandle->error);
+        $result = $conexion->query($strQuery) or exit("Error al ejecutar la consulta: ".$conexion->error);
 
         // Si la consulta devuelve un resultado válido, preparar el JSON para el gráfico
-        if ($result) {
+        if ($result->num_rows > 0) {
             $arrData = array(
                 "chart" => array(
-                    "caption" => "Entrada y Salida",
-                    "xAxisName" => "Fecha",
-                    "yAxisName" => "Cantidad",
+                    "caption" => "Cantidad de Entradas por Carrreras",
+                    "xAxisName" => "Carreras",
+                    "yAxisName" => "Cantidad de Entradas",
                     "theme" => "fusion"
                 ),
                 "data" => array()
@@ -30,26 +35,24 @@
 
             while ($row = mysqli_fetch_array($result)) {
                 array_push($arrData["data"], array(
-                    "label" => "Entrada",
-                    "value" => $row["entrada"]
-                ));
-                array_push($arrData["data"], array(
-                    "label" => "Salida",
-                    "value" => $row["salida"]
+                    "label" => $row["cargo"],
+                    "value" => $row["cantidad_entradas"]
                 ));
             }
 
             // Codificar los datos en JSON
             $jsonEncodedData = json_encode($arrData);
 
-            // Crear el gráfico de área de FusionCharts usando los datos codificados JSON
-            $areaChart = new FusionCharts("area2D", "EntradaSalidaChart", 600, 300, "chart-1", "json", $jsonEncodedData);
+            // Crear el gráfico de columnas de FusionCharts usando los datos codificados JSON
+            $columnChart = new FusionCharts("column2D", "EntradaPorCargoChart", 1200, 300, "chart-1", "json", $jsonEncodedData);
 
             // Render el gráfico
-            $areaChart->render();
+            $columnChart->render();
 
             // Cerrar la conexión a la base de datos
-            $dbhandle->close();
+            $conexion->close();
+        } else {
+            echo "No se encontraron datos.";
         }
     ?>
     
@@ -57,6 +60,3 @@
     <div id="chart-1"><!-- Fusion Charts se renderizará aquí--></div>
 </body>
 </html>
-
-<?php
-?>

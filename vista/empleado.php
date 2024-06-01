@@ -49,6 +49,7 @@ if (empty($_SESSION['nombre']) && empty($_SESSION['apellido'])) {
         <a href="fpdf/reporteEmpleado.php" target="_blank" class="btn btn-primary">
             <i class="far fa-file-pdf"></i> Generar Reporte
         </a>
+        <a href="fpdf/reportestatic.php" target="_blank" class="btn btn-danger"><i class="far fa-chart-bar"></i> Gráficas Estatica </a>
     </div>
     <table class="table table-bordered table-hover w-100" id="example">
         <thead>
