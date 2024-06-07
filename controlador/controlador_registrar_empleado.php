@@ -18,7 +18,7 @@ if (!empty($_POST["btnregistrar"])) {
                     new PNotify({
                         title: "CORRECTO!",
                         type: "success",
-                        text: "Empleado registrado correctamente",
+                        text: "Alumno registrado correctamente",
                         styling: "bootstrap3"
                     });
                 });
@@ -29,7 +29,7 @@ if (!empty($_POST["btnregistrar"])) {
                     new PNotify({
                         title: "ERROR!",
                         type: "error",
-                        text: "Empleado NO registrado",
+                        text: "Alumno NO registrado",
                         styling: "bootstrap3"
                     });
                 });

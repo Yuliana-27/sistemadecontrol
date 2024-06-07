@@ -57,7 +57,7 @@ INNER JOIN cargo ON empleado.cargo = cargo.id_cargo ");
     <thead>
     <tr>
         <th scope="col">ID</th>
-        <th scope="col">EMPLEADO</th>
+        <th scope="col">ALUMNO</th>
         <!--<th scope="col">DNI</th> -->
         <th scope="col">CARRERA</th>
         <th scope="col">Entrada</th>

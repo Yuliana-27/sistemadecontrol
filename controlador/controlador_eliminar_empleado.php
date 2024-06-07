@@ -8,7 +8,7 @@ if (!empty($_GET["id"])) {
                 new PNotify({
                     title: "CORRECTO!",
                     type: "success",
-                    text: "Empleado Se A Eliminado Correctamente",
+                    text: "Alumno Se A Eliminado Correctamente",
                     styling: "bootstrap3"
                 })
             })
@@ -19,7 +19,7 @@ if (!empty($_GET["id"])) {
                 new PNotify({
                     title: "ERROR!",
                     type: "error",
-                    text: "Empleado No Se A Eliminado",
+                    text: "Alumno No Se A Eliminado",
                     styling: "bootstrap3"
                 })
             })

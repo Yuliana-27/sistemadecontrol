@@ -100,4 +100,4 @@ while ($datos_reporte = $consulta_reporte_empleado->fetch_object()) {
 }
 
 
-$pdf->Output('Reporte_Empleado.pdf', 'I');//nombreDescarga, Visor(I->visualizar - D->descargar)
+$pdf->Output('Reporte_Alumno.pdf', 'I');//nombreDescarga, Visor(I->visualizar - D->descargar)
